@@ -96,38 +96,28 @@ public class NetworkBanner extends RelativeLayout {
         // Set the view to 0% opacity but visible, so that it is visible (but fully transparent) during the animation.
         bannerNetworkConnected.setAlpha(0f);
         bannerNetworkConnected.setVisibility(View.VISIBLE);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
 
-                // Animate the loading view to 0% opacity. After the animation ends, set its visibility to GONE as an optimization step (it won't participate in layout passes, etc.)
-                bannerNetworkDisconnected.animate()
-                        .alpha(0f)
-                        .setDuration(animationDuration)
-                        .setListener(null);
-            }
-        }).start();
+        bannerNetworkDisconnected.animate()
+                .alpha(0f)
+                .setDuration(animationDuration)
+                .setListener(null);
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                bannerNetworkConnected.animate()
-                        .alpha(1f)
-                        .setDuration(animationDuration)
-                        //  .setListener(null);
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                dissapearFadding();
-                            }
-                        });
-            }
-        }).start();
+        bannerNetworkConnected.animate()
+                .alpha(1f)
+                .setDuration(animationDuration)
+                //  .setListener(null);
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        dissapearFadding();
+                    }
+                });
 
         flipper.stopFlipping();
     }
 
     private void dissapearFadding() {
+
         bannerNetworkConnected.animate()
                 .alpha(0f)
                 .setDuration(300)
