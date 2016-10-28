@@ -1,15 +1,23 @@
 package io.roldangalan.networkbanner;
 
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String TAG = "Banner";
+    @Bind(R.id.network_banner)
+    NetworkBanner networkBanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        ButterKnife.bind(this);
+
+        this.registerReceiver(new ConnectionChangeReceiver(this), new IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     @Override
@@ -48,5 +60,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void networkStateChange(boolean connected) {
+        Log.i(TAG, "MainActivity.networkStateChange() " + connected);
+        networkBanner.networkStateChange(connected);
     }
 }
